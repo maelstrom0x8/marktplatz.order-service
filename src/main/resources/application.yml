@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://${ODS_DB_HOST:localhost}:${ODS_DB_PORT:5432}/${ODS_DATABASE:postgres}
+    username: ${ODS_DB_USER:postgres}
+    password: ${ODS_DB_PASSWORD:postgres}

@@ -1,0 +1,83 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.hibernate.orm' version '6.4.1.Final'
+	id 'org.graalvm.buildtools.native' version '0.9.28'
+	id 'com.diffplug.spotless' version '6.23.3'
+	id 'com.palantir.git-version' version '0.15.0'
+	id "com.google.osdetector" version "1.7.3"
+}
+
+group = 'com.marktplatz'
+version = gitVersion()
+
+java {
+	sourceCompatibility = '21'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.flywaydb:flyway-core:9.22.3'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events = ["PASSED", "FAILED", "SKIPPED"]
+		showStandardStreams = true
+		exceptionFormat = "full"
+	}
+}
+
+
+hibernate {
+	enhancement {
+		enableAssociationManagement = true
+	}
+}
+
+spotless {
+	java {
+		target 'src/**/*.java'
+		googleJavaFormat('1.17.0')
+		licenseHeaderFile "${rootDir}/gradle/spotless.java.license.txt"
+		ratchetFrom 'origin/master'
+		trimTrailingWhitespace()
+		endWithNewline()
+		targetExclude '**/Tmp*.java'
+	}
+	groovyGradle {
+		target '**/*.gradle'
+		greclipse()
+		indentWithSpaces(2)
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+}
+
+tasks.named("bootBuildImage") {
+	builder = "dashaun/builder:tiny"
+	environment = ["BP_NATIVE_IMAGE": "true"]
+	imageName = "maelstrom0x8/marktplatz-${rootProject.getName()}:${project.version}"
+}
+
+
