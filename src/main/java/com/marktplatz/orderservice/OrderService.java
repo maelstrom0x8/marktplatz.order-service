@@ -59,7 +59,7 @@ public class OrderService {
 
   public OrderDetail getOrderInfo(UUID id) {
     Order order = getOrderById(id);
-    List<OrderItem> items = repository.findAllOrderItems(order.getId());
+    List<OrderItemDTO> items = repository.findAllOrderItems(order.getId());
 
     return new OrderDetail(order, items);
   }

@@ -17,4 +17,4 @@ package com.marktplatz.orderservice;
 
 import java.util.List;
 
-public record OrderDetail(Order order, List<OrderItem> items) {}
+public record OrderDetail(Order order, List<OrderItemDTO> items) {}

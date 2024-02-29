@@ -41,12 +41,11 @@ class OrderRepositoryTest {
     List<OrderItem> items = mapToItems(Map.of(234L, 5, 5644L, 1, 5653L, 6), order);
     itemRepository.saveAll(items);
 
-    List<OrderItem> allOrderItems = orderRepository.findAllOrderItems(order.getId());
+    List<OrderItemDTO> allOrderItems = orderRepository.findAllOrderItems(order.getId());
     assertThat(allOrderItems).hasSize(3);
     assertThat(allOrderItems)
-        .extracting(OrderItem::getOrder)
-        .extracting(Order::getId)
-        .isEqualTo(order.getId());
+        .extracting(OrderItemDTO::orderId)
+        .allMatch(e -> e.equals(order.getId()));
   }
 
   private List<OrderItem> mapToItems(Map<Long, Integer> cart, Order order) {

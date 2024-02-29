@@ -15,15 +15,6 @@
  */
 package com.marktplatz.orderservice;
 
-import java.util.List;
 import java.util.UUID;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-public interface OrderRepository extends JpaRepository<Order, UUID> {
-
-  @Query(
-      "SELECT new com.marktplatz.orderservice.OrderItemDTO(o.id, o.quantity, o.productId, o.order.id) FROM OrderItem o WHERE o.order.id = :id")
-  List<OrderItemDTO> findAllOrderItems(@Param("id") UUID id);
-}
+public record OrderItemDTO(Long id, Integer quantity, Long productId, UUID orderId) {}

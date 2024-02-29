@@ -16,10 +16,11 @@
 package com.marktplatz.orderservice;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -59,10 +60,7 @@ public class Order {
   public Order() {}
 
   public Order(OrderStatus orderStatus) {
-    this.id = id;
     this.orderStatus = orderStatus;
-    this.createdAt = createdAt;
-    this.lastModified = lastModified;
   }
 
   public UUID getId() {
